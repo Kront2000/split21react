@@ -1,0 +1,65 @@
+.screen {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  background: var(--color-bg);
+}
+
+.board {
+  position: absolute;
+  overflow-y: scroll;
+  width: 95%;
+  height: 90%;
+  left: 50%;
+  top: 50px;
+  max-width: 1000px;
+  border-radius: 6px;
+  background: rgba(36, 36, 36, 0.163);
+  backdrop-filter: blur(4px);
+  translate: -50% 0;
+  border: 0.5px solid rgba(255, 255, 255, 0.059);
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.title{
+  font-size: 30px;
+  color: var(--color-text);
+  padding: 10px 0;
+}
+.subtitle{
+  font-size: 20px;
+  color: var(--color-text);
+  padding: 30px 0px 10px 0px;
+}
+
+.text{
+  color: var(--color-text);
+  padding: 5px 0px;
+}
+
+.list {
+  padding: 0px 20px;
+}
+
+.li {
+  color: var(--color-text);
+  padding: 5px 0px;
+}
+
+.grid{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    border-radius: 6px;
+    background: var(--color-opacity-bg);
+    align-items: center;
+}

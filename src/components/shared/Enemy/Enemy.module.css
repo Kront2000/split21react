@@ -1,0 +1,42 @@
+.wrapper{
+    width: 100%;
+    display: flex;
+}
+
+.avatar {
+    width: 73px;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background: var(--color-card-bg);
+    position: relative;
+    z-index: 100;
+
+}
+
+.avatar-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+.message {
+    display: flex;
+    width: 277px;
+    margin: 8px;
+    border-radius: 6px;
+    background: var(--color-card-bg);
+    padding: 4px;
+    translate: -60px 0px;
+    opacity: 0;
+    transition-duration: 300ms;
+}
+
+.message--show{
+    opacity: 100%;
+    translate: 0 0;
+}
+
+.text {
+    color: var(--color-text);
+}

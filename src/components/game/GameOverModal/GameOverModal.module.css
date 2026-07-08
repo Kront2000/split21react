@@ -1,0 +1,39 @@
+.overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.504);
+    z-index: 100;
+}
+
+.modal{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    gap: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.133);
+    border-radius: 6px;
+    padding: 15px;
+    background: var(--color-card-bg);
+}
+
+.text{
+    color: var(--color-text);
+    text-align: center;
+}
+
+.modal__img{
+    width: 100%;
+    aspect-ratio: 1/1;
+    
+}
+
+.hidden {
+    opacity: 0%;
+    pointer-events: none;
+}

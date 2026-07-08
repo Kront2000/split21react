@@ -1,0 +1,47 @@
+.wallpaper {
+    --move-speed: 80s;
+    --impulse-spped: 5s;
+    --opacity: 80%;
+    width: 180vw;
+    height: 180vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    background-image: url(/src/assets/image/bg.png);
+    animation-name: slidein;
+    animation: slidein var(--move-speed) infinite, impulse var(--impulse-spped) infinite;
+    opacity: var(--opacity);
+}
+
+@keyframes slidein {
+    from {
+        translate: -50% -50%;
+    }
+
+    50% {
+        translate: -30% -30%;
+    }
+
+    to {
+        translate: -50% -35%;
+    }
+}
+
+@keyframes impulse {
+    from {
+        opacity: calc(var(--opacity) / 1.70);
+    }
+
+    20% {
+        opacity: calc(var(--opacity));
+    }
+
+    40% {
+        opacity: calc(var(--opacity) / 1.70);
+    }
+
+    to {
+        opacity: calc(var(--opacity) / 1.70);
+    }
+}

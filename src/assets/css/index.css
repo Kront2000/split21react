@@ -1,0 +1,31 @@
+
+
+@font-face {
+  font-family: 'Russo';
+  src: url('/src/assets/fonts/russo-one.woff') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+:root {
+  --color-bg: #181818;
+  --color-text: #eeeeee;
+  --color-gray: #383838;
+  --color-hover-gray: #4e4e4e;
+  --color-card-bg: #262626;
+  --color-red: #FF2F2F;
+  --color-white: #FFFFFF;
+  --color-text-gray: #3B3B3B;
+  --color-succes: #00B406;
+  --color-error: #D72222;
+  --color-opacity-bg: rgba(36, 36, 36, 0.163);
+}
+
+body {
+    font-family: 'Russo';
+    height: fit-content !important;
+    overflow: hidden;
+}
+

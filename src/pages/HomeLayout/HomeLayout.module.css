@@ -1,0 +1,7 @@
+.screen {
+  width: 100vw !important;
+  min-height: 100vh !important;
+  overflow: hidden;
+  position: relative;
+  background: var(--color-bg);
+}

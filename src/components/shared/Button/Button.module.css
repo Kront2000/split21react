@@ -1,0 +1,45 @@
+.button {
+  padding: 14px;
+  border-radius: 6px;
+  color: var(--color-text);
+  background: var(--color-gray);
+  box-shadow: 4px 2px 10px black;
+  text-align: center;
+  display: flex;
+  gap: 14px;
+  display: felx;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+
+  &:hover {
+  background: var(--color-hover-gray);
+}
+}
+
+
+
+.error-background {
+  background: var(--color-error);
+
+  &:hover {
+    background: var(--color-error);
+    opacity: 90%;
+  }
+}
+
+.succes-background {
+  background: var(--color-succes);
+
+  &:hover {
+    background: var(--color-succes);
+    opacity: 90%;
+  }
+}
+
+
+
+.fit {
+    width: fit-content;
+}
+
