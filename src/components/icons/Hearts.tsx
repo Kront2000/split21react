@@ -1,6 +1,6 @@
-export default function () {
+export default function ({className} : {className: string}) {
     return (
-        <svg width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className={className} width="15" height="13" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path fillRule="evenodd" clipRule="evenodd" d="M3.93091 0.00197263C5.0287 0.0248313 6.24761 0.562011 7.50207 1.78495C8.75432 0.565439 9.97211 0.0294031 11.0688 0.0076873C12.2244 -0.0151714 13.1999 0.533437 13.8866 1.35635C15.24 2.97932 15.52 5.75665 13.8222 7.50191L13.8211 7.50305L9.1021 12.3125C8.20208 13.2292 6.80206 13.2292 5.90205 12.3125L1.1842 7.50305C-0.519161 5.74979 -0.24249 2.97246 1.11086 1.34721C1.79643 0.524294 2.772 -0.0243149 3.9298 0.000829643L3.93091 0.00197263Z" fill="#FF2F2F"/>
 </svg>
 

@@ -1,7 +1,13 @@
 import styles from './GameOverModal.module.css'
 import Button from '@/src/components/shared/Button/Button'
 
-export default function GameOverModal({message, show, startGame}){
+interface Props {
+    message: {message: string, win?: "user" | "enemy"}
+    show: boolean
+    startGame?: () => void
+}
+
+export default function GameOverModal({message, show, startGame}: Props){
     return (
         <div onClick={startGame} className={styles.overlay + " " + (show == true ?  " " : styles.hidden)}>
             <div className={styles.modal}>

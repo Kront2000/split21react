@@ -4,7 +4,14 @@ import Peaks from "../../icons/Peaks"
 import Clubs from "../../icons/Сlubs"
 import styles from "./Card.module.css"
 
-export default function ({ nominal, suit = "diamonds", side = "front", style }) {
+interface Props {
+    nominal?: "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "T"
+    side?: "front" | "back"
+    suit?: "diamonds" | "peaks" | "clubs" | "hearts"
+    style?: React.CSSProperties
+}
+
+export default function ({ nominal, suit = "diamonds", side = "front", style }: Props) {
     if (side == "front") {
         return (
             <div style={style} className={styles.card}>

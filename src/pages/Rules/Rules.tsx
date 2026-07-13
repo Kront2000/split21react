@@ -3,11 +3,14 @@ import styles from './Rules.module.css'
 import Button from '@/src/components/shared/Button/Button';
 import Back from '@/src/components/icons/Back';
 
-
+interface Card {
+    name: "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "T"
+    value: number
+}
 
 export default function Rules() {
 
-    const arr = [{name: "J", value: 2}, {name: "Q", value: 3}, {name: "K", value: 4} ,{name: "6", value: 6}, {name: "7", value: 7}, {name: "8", value: 8}, {name: "9", value: 9}, {name: "10", value: 10}, {name: "T", value: 11}];
+    const arr: Card[] = [{name: "J", value: 2}, {name: "Q", value: 3}, {name: "K", value: 4} ,{name: "6", value: 6}, {name: "7", value: 7}, {name: "8", value: 8}, {name: "9", value: 9}, {name: "10", value: 10}, {name: "T", value: 11}];
 
     return (
         <div className={styles.board}>
@@ -46,7 +49,7 @@ export default function Rules() {
             <h4 className={styles.subtitle}>Номинал карт</h4>
 
             <div className={styles.grid}>
-                {arr.map((card) => <div key={card.value} className={styles["card-wrapper"]}><Card nominal={card.name} scale='1' /><p className={styles.text}>{card.value}</p></div>)}
+                {arr.map((card) => <div key={card.value} className={styles["card-wrapper"]}><Card nominal={card.name} /><p className={styles.text}>{card.value}</p></div>)}
             </div>
         </div>
     )
