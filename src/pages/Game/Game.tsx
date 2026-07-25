@@ -6,26 +6,104 @@ import Take from '@/src/components/icons/Take';
 import Exit from '@/src/components/icons/Exit';
 import Enemy from '@/src/components/shared/Enemy/Enemy';
 import GameOverModal from '@/src/components/game/GameOverModal/GameOverModal';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import * as cookie from '@/src/utils/cookie';
 
+interface Card {
+    id: number;
+    name: "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "T";
+    suit: "diamonds" | "peaks" | "clubs" | "hearts";
+    value: number;
+}
 
-
+interface modalMessage {
+    message: string
+    win?: "user" | "enemy"
+}
 
 export default function Game() {
+    const wsRef = useRef<WebSocket>(null)
+    useEffect(() => {
+        console.log(cookie.getCookie("accessToken"))
+        console.log(document.cookie)
+        const url = cookie.getCookie("accessToken") ? import.meta.env.VITE_SERVER_URL + "?token=" + cookie.getCookie("accessToken") : import.meta.env.VITE_SERVER_URL
+        let socket = new WebSocket(url)
+        wsRef.current = socket
 
-    const [modalMessage, setModalMessage] = useState({ message: "", });
+        socket.onopen = () => {
+            console.log("Успешное подключение к севреру")
+        }
+        socket.onclose = () => {
+            console.log(() => {
+                console.log("Соединение разорвано")
+            })
+        }
+        socket.onmessage = (message) => {
+            const parseMessage = JSON.parse(message.data)
+            console.log(parseMessage)
+            if (parseMessage.whoseTurn) {
+                setWhoseTurn(parseMessage.whoseTurn)
+            }
+            if (parseMessage.enemyMessage) {
+                setMessage(parseMessage.enemyMessage)
+            }
+            if (parseMessage.countOfDeckEnemy) {
+                let array = []
+                for (let i = 0; i < parseMessage.countOfDeckEnemy; i++) {
+                    array.push(i)
+                }
+                setCardsCountOfEnemy(array)
+            }
+            if (parseMessage.userDeck) {
+                setUserDeck(parseMessage.userDeck)
+            }
+            if (parseMessage.countMainDeck){
+                setCountMainDeck(parseMessage.countMainDeck)
+            }
+            if (parseMessage.winMessage) {
+                setModalMessage({ message: parseMessage.winMessage, win: parseMessage.win})
+                setTimeout(() => {
+                    setShowModal(true)
+                }, 3000)
+            }
+
+        }
+        return () => {
+            socket.close(1000, "работа закончена");
+        }
+
+    }, [])
+    const send = useCallback((data: "take" | "pass" | "start") => {
+        if (wsRef.current?.readyState === WebSocket.OPEN) {
+            console.log(wsRef.current)
+            wsRef.current.send(JSON.stringify({ event: data }))
+        }
+    }, [])
+
+    function startGame(){
+        setUserDeck([])
+        setCardsCountOfEnemy([])
+        setMessage('')
+        setShowModal(false)
+        setWhoseTurn('start')
+    }
+
+    const [userDeck, setUserDeck] = useState<Card[]>([])
+    const [cardsCountOfEnemy, setCardsCountOfEnemy] = useState<number[]>([])
+    const [modalMessage, setModalMessage] = useState<modalMessage>({ message: ""});
     const [message, setMessage] = useState('');
     const [showModal, setShowModal] = useState(false)
     const [whoseTurn, setWhoseTurn] = useState("user")
+    const [countMainDeck, setCountMainDeck] = useState(0)
     return (
         <div className={styles.screen}>
             <Background speed="10000s" opacity="40%" />
-            <GameOverModal show={showModal} message={modalMessage} />
+            <GameOverModal show={showModal} message={modalMessage} startGame={startGame}/>
 
             <div className={styles['game-palce']}>
                 <div className={styles['user-zone']}>
                     <div className={styles['user-zone__card-grid']}>
-                        {/* {cardsOfEnemy.map((card) => <Card style={{ rotate: "180deg" }} key={card.id} nominal={card.name} suit={card.suit} side='back' />)} */}
+                        {cardsCountOfEnemy.map((i) => <Card side='back' key={i} />)}
                     </div>
 
                     <Enemy message={message} />
@@ -37,17 +115,17 @@ export default function Game() {
                             <Card side='back' />
                             <div className={styles['info-container__text-container']}>
                                 <p onClick={() => { setShowModal(true) }} className={styles.text}>Ваш ход</p>
-                                <p onClick={() => { console.log(showModal) }} className={styles.text}>В колоде *** карты</p>
+                                <p onClick={() => { console.log(showModal) }} className={styles.text}>В колоде {countMainDeck} карты</p>
                             </div>
                         </div>
                         <div className={styles['info-container__buttons-container']}>
-                            {/* {(whoseTurn == 'user') && <Button onClick={() => { }} color="succes" afterIcon={<Take />}>Взять карту</Button>}
-                            {(whoseTurn == 'user') && <Button onClick={() => { }} color="error" afterIcon={<Exit />}>Хватит</Button>}
-                            {countOfGameSteps == 0 && <Button onClick={} color="suuces" >Начать</Button>} */}
+                            {whoseTurn == 'user' && <Button onClick={() => { send("take") }} color="succes" afterIcon={<Take />}>Взять карту</Button>}
+                            {whoseTurn == 'user' && <Button onClick={() => { send("pass") }} color="error" afterIcon={<Exit />}>Хватит</Button>}
+                            {whoseTurn == 'start' && <Button onClick={() => { send("start") }} color="suuces" >Начать</Button>}
                         </div>
                     </div>
                     <div className={styles['user-zone__card-grid']}>
-                        {/* {cardsOfUser.map((card) => <Card key={card.id} nominal={card.name} suit={card.suit} />)} */}
+                        {userDeck.map((card) => <Card key={card.id} nominal={card.name} suit={card.suit} />)}
                     </div>
                 </div>
             </div>

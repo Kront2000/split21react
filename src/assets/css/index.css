@@ -21,6 +21,10 @@
   --color-succes: #00B406;
   --color-error: #D72222;
   --color-opacity-bg: rgba(36, 36, 36, 0.163);
+  --color-bg-glass: rgba(0, 0, 0, 0.238);
+  --color-blue-border: rgba(67, 118, 245, 0.14);
+  --color-white-border: rgba(251, 252, 255, 0.082);
+  --color-link: rgba(0, 115, 255, 1);
 }
 
 body {

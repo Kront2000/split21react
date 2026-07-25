@@ -8,13 +8,14 @@ interface Props {
     nominal?: "6" | "7" | "8" | "9" | "10" | "J" | "Q" | "K" | "T"
     side?: "front" | "back"
     suit?: "diamonds" | "peaks" | "clubs" | "hearts"
-    style?: React.CSSProperties
+    style?: React.CSSProperties,
+    className?: string
 }
 
-export default function ({ nominal, suit = "diamonds", side = "front", style }: Props) {
+export default function ({ nominal = "6", suit = "diamonds", side = "front", style, className }: Props) {
     if (side == "front") {
         return (
-            <div style={style} className={styles.card}>
+            <div  style={style} className={styles.card + " " + className}>
                 <div className={styles['left-container']}>
                     {suit == "diamonds" && <Diamonds className={styles.suit} />}
                     {suit == "peaks" && <Peaks className={styles.suit} />}
@@ -33,7 +34,7 @@ export default function ({ nominal, suit = "diamonds", side = "front", style }: 
         )
     } else {
         return (
-            <div style={style} className={styles.card}>
+            <div style={style} className={styles.card + " " + className}>
                 <span className={styles['back-text']}>
                     Split21
                 </span>

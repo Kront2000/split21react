@@ -1,0 +1,9 @@
+.wrapper {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 500;
+    gap: 10px;
+    flex-direction: column;
+    display: flex;
+}
