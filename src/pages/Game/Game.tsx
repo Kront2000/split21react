@@ -8,6 +8,7 @@ import Enemy from '@/src/components/shared/Enemy/Enemy';
 import GameOverModal from '@/src/components/game/GameOverModal/GameOverModal';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as cookie from '@/src/utils/cookie';
+import FoundedOverModal from '@/src/components/game/FoundedOverModal/FoundedOverModal';
 
 interface Card {
     id: number;
@@ -23,20 +24,23 @@ interface modalMessage {
 
 export default function Game() {
     const wsRef = useRef<WebSocket>(null)
+    const type = "pvp"
     useEffect(() => {
         console.log(cookie.getCookie("accessToken"))
         console.log(document.cookie)
-        const url = cookie.getCookie("accessToken") ? import.meta.env.VITE_SERVER_URL + "?token=" + cookie.getCookie("accessToken") : import.meta.env.VITE_SERVER_URL
+        const url = cookie.getCookie("accessToken") ? import.meta.env.VITE_SERVER_URL + "?token=" + cookie.getCookie("accessToken") + "&type=ai" : import.meta.env.VITE_SERVER_URL + "?type=" + type
         let socket = new WebSocket(url)
         wsRef.current = socket
 
         socket.onopen = () => {
+            if(type == "pvp"){
+                setShowFoundedOverModal(true)
+            }
             console.log("Успешное подключение к севреру")
         }
         socket.onclose = () => {
-            console.log(() => {
-                console.log("Соединение разорвано")
-            })
+            console.log("Соединение разорвано")
+            setShowFoundedOverModal(false)
         }
         socket.onmessage = (message) => {
             const parseMessage = JSON.parse(message.data)
@@ -57,19 +61,23 @@ export default function Game() {
             if (parseMessage.userDeck) {
                 setUserDeck(parseMessage.userDeck)
             }
-            if (parseMessage.countMainDeck){
+            if (parseMessage.countMainDeck) {
                 setCountMainDeck(parseMessage.countMainDeck)
             }
+            if (parseMessage.info){
+                if(parseMessage.info == "enemy is founded"){
+                    setShowFoundedOverModal(false)
+                }
+            }
             if (parseMessage.winMessage) {
-                setModalMessage({ message: parseMessage.winMessage, win: parseMessage.win})
+                setModalMessage({ message: parseMessage.winMessage, win: parseMessage.win })
                 setTimeout(() => {
                     setShowModal(true)
                 }, 3000)
             }
-
         }
         return () => {
-            socket.close(1000, "работа закончена");
+            socket.close();
         }
 
     }, [])
@@ -80,7 +88,7 @@ export default function Game() {
         }
     }, [])
 
-    function startGame(){
+    function startGame() {
         setUserDeck([])
         setCardsCountOfEnemy([])
         setMessage('')
@@ -90,15 +98,17 @@ export default function Game() {
 
     const [userDeck, setUserDeck] = useState<Card[]>([])
     const [cardsCountOfEnemy, setCardsCountOfEnemy] = useState<number[]>([])
-    const [modalMessage, setModalMessage] = useState<modalMessage>({ message: ""});
+    const [modalMessage, setModalMessage] = useState<modalMessage>({ message: "" });
     const [message, setMessage] = useState('');
     const [showModal, setShowModal] = useState(false)
     const [whoseTurn, setWhoseTurn] = useState("user")
     const [countMainDeck, setCountMainDeck] = useState(0)
+    const [showFoundedOverModal, setShowFoundedOverModal] = useState(false)
     return (
         <div className={styles.screen}>
             <Background speed="10000s" opacity="40%" />
-            <GameOverModal show={showModal} message={modalMessage} startGame={startGame}/>
+            <GameOverModal show={showModal} message={modalMessage} startGame={startGame} />
+            <FoundedOverModal show={showFoundedOverModal}/>
 
             <div className={styles['game-palce']}>
                 <div className={styles['user-zone']}>
