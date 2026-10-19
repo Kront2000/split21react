@@ -8,7 +8,8 @@ import Enemy from '@/src/components/shared/Enemy/Enemy';
 import GameOverModal from '@/src/components/game/GameOverModal/GameOverModal';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as cookie from '@/src/utils/cookie';
-import FoundedOverModal from '@/src/components/game/FoundedOverModal/FoundedOverModal';
+import { useNavigate } from 'react-router';
+import LoadingOverModal from '@/src/components/game/LoadingOverModal/LoadingOverModal';
 
 interface Card {
     id: number;
@@ -22,20 +23,21 @@ interface modalMessage {
     win?: "user" | "enemy"
 }
 
-export default function Game() {
+export default function PVPGame() {
     const wsRef = useRef<WebSocket>(null)
-    const type = "pvp"
+    const type = "ai"
+    const [enemyName, setEnemyName] = useState<undefined | string>(undefined)
+    const [enemyRating, setEnemyRating] = useState<undefined | string>(undefined)
+    let navigate = useNavigate();
     useEffect(() => {
         console.log(cookie.getCookie("accessToken"))
         console.log(document.cookie)
-        const url = cookie.getCookie("accessToken") ? import.meta.env.VITE_SERVER_URL + "?token=" + cookie.getCookie("accessToken") + "&type=ai" : import.meta.env.VITE_SERVER_URL + "?type=" + type
+        const url = cookie.getCookie("accessToken") ? import.meta.env.VITE_SERVER_URL + "?token=" + cookie.getCookie("accessToken") + "&type=" + type : import.meta.env.VITE_SERVER_URL + "?type=" + type
         let socket = new WebSocket(url)
         wsRef.current = socket
 
         socket.onopen = () => {
-            if(type == "pvp"){
-                setShowFoundedOverModal(true)
-            }
+            setShowFoundedOverModal(true)
             console.log("Успешное подключение к севреру")
         }
         socket.onclose = () => {
@@ -47,6 +49,18 @@ export default function Game() {
             console.log(parseMessage)
             if (parseMessage.whoseTurn) {
                 setWhoseTurn(parseMessage.whoseTurn)
+            }
+            if (parseMessage.info) {
+                if (parseMessage.info === "game over") {
+                    navigate("/")
+                }
+            }
+            if (parseMessage.enemyName) {
+                console.log(parseMessage.enemyName)
+                setEnemyName(parseMessage.enemyName)
+                if (parseMessage.enemyRating) {
+                    setEnemyRating(parseMessage.enemyRating)
+                }
             }
             if (parseMessage.enemyMessage) {
                 setMessage(parseMessage.enemyMessage)
@@ -64,8 +78,8 @@ export default function Game() {
             if (parseMessage.countMainDeck) {
                 setCountMainDeck(parseMessage.countMainDeck)
             }
-            if (parseMessage.info){
-                if(parseMessage.info == "enemy is founded"){
+            if (parseMessage.info) {
+                if (parseMessage.info == "enemy is founded") {
                     setShowFoundedOverModal(false)
                 }
             }
@@ -108,15 +122,14 @@ export default function Game() {
         <div className={styles.screen}>
             <Background speed="10000s" opacity="40%" />
             <GameOverModal show={showModal} message={modalMessage} startGame={startGame} />
-            <FoundedOverModal show={showFoundedOverModal}/>
+            <LoadingOverModal show={showFoundedOverModal} message='Запускаем нейросеть'/>
 
             <div className={styles['game-palce']}>
                 <div className={styles['user-zone']}>
                     <div className={styles['user-zone__card-grid']}>
                         {cardsCountOfEnemy.map((i) => <Card side='back' key={i} />)}
                     </div>
-
-                    <Enemy message={message} />
+                    {whoseTurn !== 'start' && whoseTurn !== 'waiting' && <Enemy name={enemyName} rating={enemyRating} message={message} />}
                 </div>
 
                 <div className={styles['user-zone']}>
@@ -131,7 +144,7 @@ export default function Game() {
                         <div className={styles['info-container__buttons-container']}>
                             {whoseTurn == 'user' && <Button onClick={() => { send("take") }} color="succes" afterIcon={<Take />}>Взять карту</Button>}
                             {whoseTurn == 'user' && <Button onClick={() => { send("pass") }} color="error" afterIcon={<Exit />}>Хватит</Button>}
-                            {whoseTurn == 'start' && <Button onClick={() => { send("start") }} color="suuces" >Начать</Button>}
+                            {whoseTurn == 'start' && <Button onClick={() => { send("start"); setWhoseTurn("waiting") }} color="succes" >Начать</Button>}
                         </div>
                     </div>
                     <div className={styles['user-zone__card-grid']}>

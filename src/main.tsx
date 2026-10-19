@@ -7,7 +7,8 @@ import HomeLayout from '@/src/pages/HomeLayout/HomeLayout'
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import Rules from './pages/Rules/Rules'
-import Game from './pages/Game/Game'
+import AiGame from './pages/Game/AIGame'
+import PVPGame from './pages/Game/PVPGame'
 import Register from './pages/Register/Register'
 import Leaderboard from './pages/Leaderboard/Leaderboard'
 import Toast from '@/src/components/shared/Toast/Toast'
@@ -41,9 +42,14 @@ const router = createBrowserRouter([
     ]
   },
   {
-    path: "/game",
-    element: <Game />
+    path: "/game/ai",
+    element: <AiGame />
+  },
+  {
+    path: "/game/pvp",
+    element: <PVPGame />
   }
+
 
 ]);
 

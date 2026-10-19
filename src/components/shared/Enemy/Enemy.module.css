@@ -5,11 +5,15 @@
 
 .avatar {
     width: 73px;
+    height: 73px;
     aspect-ratio: 1/1;
     border-radius: 100%;
     background: var(--color-card-bg);
     position: relative;
     z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
 }
 
@@ -35,6 +39,15 @@
 .message--show{
     opacity: 100%;
     translate: 0 0;
+}
+
+.enemy-info {
+    display: flex;
+    flex-direction: column;
+    width: 277px;
+    justify-content: space-between;
+    padding: 20px 20px;
+    gap: 5px;
 }
 
 .text {
